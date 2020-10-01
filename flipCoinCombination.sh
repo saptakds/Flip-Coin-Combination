@@ -22,7 +22,7 @@ do
 	then
 		((H++))
 	else
-		((T--))
+		((T++))
 	fi
 done
 probH=$(echo "scale=2;($H/$flipTimes)*100" | bc )
@@ -59,7 +59,7 @@ do
 	then
 		((TH++))
     else
-        ((TT--))
+        ((TT++))
     fi
 done
 probHH=$(echo "scale=2;($HH/$flipTimes)*100" | bc )
@@ -113,7 +113,7 @@ do
         ((HTH++))
     elif [ $face = "HTT" ]
 	then
-        ((HTT--))
+        ((HTT++))
 	elif [ $face = "THH" ]
     then
         ((THH++))
