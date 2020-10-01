@@ -21,7 +21,7 @@ do
 	then
 		((H++))
 	else
-		((T--))
+		((T++))
 	fi
 done
 probH=$(echo "scale=2;($H/$flipTimes)*100" | bc )
