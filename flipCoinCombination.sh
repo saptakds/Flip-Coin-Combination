@@ -8,6 +8,7 @@ function getFace(){
 	fi
 }
 declare -A combi
+declare -A top3
 flipTimes=21
 #Singlet Combinations
 echo "Singlet Combinations..."
@@ -22,16 +23,18 @@ do
 	then
 		((H++))
 	else
-		((T--))
+		((T++))
 	fi
 done
 probH=$(echo "scale=2;($H/$flipTimes)*100" | bc )
 probT=$(echo "scale=2;($T/$flipTimes)*100" | bc )
 if [ $H -gt $T ]
 then
+	top3[H]=$H
 	echo "Winner: H"
 	echo "Percentage: $probH"
 else
+    top3[T]=$T
 	echo "Winner: T"
 	echo "Percentage: $probT"
 fi
@@ -59,7 +62,7 @@ do
 	then
 		((TH++))
     else
-        ((TT--))
+        ((TT++))
     fi
 done
 probHH=$(echo "scale=2;($HH/$flipTimes)*100" | bc )
@@ -68,17 +71,21 @@ probTH=$(echo "scale=2;($TH/$flipTimes)*100" | bc )
 probTT=$(echo "scale=2;($TT/$flipTimes)*100" | bc )
 if [ $HH -gt $HT -a $HH -gt $TH -a $HH -gt $TT ]
 then
+    top3[HH]=$HH
     echo "Winner: HH"
     echo "Percentage: $probHH"
 elif [ $HT -gt $HH -a $HT -gt $TH -a $HT -gt $TT ]
 then
+    top3[HT]=$HT
     echo "Winner: HT"
     echo "Percentage: $probHT"
 elif [ $TH -gt $HH -a $TH -gt $HT -a $TH -gt $TT ]
 then
+    top3[TH]=$TH
     echo "Winner: TH"
     echo "Percentage: $probTH"
 else
+    top3[TT]=$TT
     echo "Winner: TT"
     echo "Percentage: $probTT"
 fi
@@ -113,7 +120,7 @@ do
         ((HTH++))
     elif [ $face = "HTT" ]
 	then
-        ((HTT--))
+        ((HTT++))
 	elif [ $face = "THH" ]
     then
         ((THH++))
@@ -137,33 +144,52 @@ probTTH=$(echo "scale=2;($TTH/$flipTimes)*100" | bc )
 probTTT=$(echo "scale=2;($TTT/$flipTimes)*100" | bc )
 if [ $HHH -gt $HHT -a $HHH -gt $HTH -a $HHH -gt $HTT -a $HHH -gt $THH -a $HHH -gt $THT -a $HHH -gt $TTH -a $HHH -gt $TTT ]
 then
+    top3[HHH]=$HHH
     echo "Winner: HHH"
     echo "Percentage: $probHHH"
 elif [ $HHT -gt $HHH -a $HHT -gt $HTH -a $HHT -gt $HTT -a $HHT -gt $THH -a $HHT -gt $THT -a $HHT -gt $TTH -a $HHT -gt $TTT ]
 then
+    top3[HHT]=$HHT
     echo "Winner: HHT"
     echo "Percentage: $probHHT"
 elif [ $HTH -gt $HHH -a $HTH -gt $HHT -a $HTH -gt $HTT -a $HTH -gt $THH -a $HTH -gt $THT -a $HTH -gt $TTH -a $HTH -gt $TTT ]
 then
-    echo "Winner: HHT"
-    echo "Percentage: $probHHT"
+    top3[HTH]=$HTH
+    echo "Winner: HTH"
+    echo "Percentage: $probHTH"
 elif [ $HTT -gt $HHH -a $HTT -gt $HHT -a $HTT -gt $HTH -a $HTT -gt $THH -a $HTT -gt $THT -a $HTT -gt $TTH -a $HTT -gt $TTT ]
 then
+    top3[HTT]=$HTT
     echo "Winner: HTT"
     echo "Percentage: $probHTT"
 elif [ $THH -gt $HHT -a $THH -gt $HTH -a $THH -gt $HTT -a $THH -gt $HHH -a $THH -gt $THT -a $THH -gt $TTH -a $THH -gt $TTT ]
 then
+    top3[THH]=$THH
     echo "Winner: THH"
     echo "Percentage: $probTHH"
 elif [ $THT -gt $HHH -a $THT -gt $HTH -a $THT -gt $HTT -a $THT -gt $THH -a $THT -gt $HHT -a $THT -gt $TTH -a $THT -gt $TTT ]
 then
+    top3[THT]=$THT
     echo "Winner: THT"
     echo "Percentage: $probTHT"
 elif [ $TTH -gt $HHH -a $TTH -gt $HHT -a $TTH -gt $HTT -a $TTH -gt $THH -a $TTH -gt $THT -a $TTH -gt $HTH -a $TTH -gt $TTT ]
 then
-    echo "Winner: THT"
-    echo "Percentage: $probTHT"
+    top3[TTH]=$TTH
+    echo "Winner: TTH"
+    echo "Percentage: $probTTH"
 else
+    top3[TTT]=$TTT
     echo "Winner: TTT"
     echo "Percentage: $probTTT"
 fi
+maxOcc=0
+maxKey=0
+for k in ${!top3[@]}
+do
+	if [ ${top3[$k]} -gt $maxOcc ]
+	then
+		maxOcc=${top3[$k]}
+		maxKey=$k
+	fi
+done
+echo "Winning combination: $maxKey"
